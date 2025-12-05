@@ -17,7 +17,7 @@ from torchsdf import index_vertices_by_faces, compute_sdf
 
 class ObjectModel:
 
-    def __init__(self, data_root_path, batch_size_each, num_samples=2000, device="cuda"):
+    def __init__(self, data_root_path, batch_size_each, num_samples=1024, device="cuda"):
         """
         Create a Object Model
         

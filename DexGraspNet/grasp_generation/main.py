@@ -33,13 +33,9 @@ parser.add_argument('--seed', default=1, type=int)
 parser.add_argument('--gpu', default="2", type=str)
 parser.add_argument('--object_code_list', default=
     [
-        'sem-Car-2f28e2bd754977da8cfac9da0ff28f62',
-        'sem-Car-27e267f0570f121869a949ac99a843c4',
-        'sem-Car-669043a8ce40d9d78781f76a6db4ab62',
-        'sem-Car-58379002fbdaf20e61a47cff24512a0',
-        'sem-Car-aeeb2fb31215f3249acee38782dd9680',
+        'sem-Car-2f28e2bd754977da8cfac9da0ff28f62'
     ], type=list)
-parser.add_argument('--name', default='exp_2', type=str)
+parser.add_argument('--name', default='exp', type=str)
 parser.add_argument('--n_contact', default=4, type=int)
 parser.add_argument('--batch_size', default=128, type=int)
 parser.add_argument('--n_iter', default=6000, type=int)
@@ -55,6 +51,7 @@ parser.add_argument('--w_dis', default=100.0, type=float)
 parser.add_argument('--w_pen', default=100.0, type=float)
 parser.add_argument('--w_spen', default=10.0, type=float)
 parser.add_argument('--w_joints', default=1.0, type=float)
+parser.add_argument('--w_table', default=0.1, type=float)
 # initialization settings
 parser.add_argument('--jitter_strength', default=0.1, type=float)
 parser.add_argument('--distance_lower', default=0.2, type=float)
@@ -78,6 +75,7 @@ torch.manual_seed(args.seed)
 # prepare models
 
 total_batch_size = len(args.object_code_list) * args.batch_size
+# e.g., 5 objects × 128 grasps each = 640 total grasp candidates
 
 # os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -92,9 +90,9 @@ hand_model = HandModel(
 )
 
 object_model = ObjectModel(
-    data_root_path='../data/meshdata',
+    data_root_path='/home/arjun/datasets/dexgraspnet/filtered_meshes',  
     batch_size_each=args.batch_size,
-    num_samples=2000, 
+    num_samples=1024, 
     device=device
 )
 object_model.initialize(args.object_code_list)
@@ -143,17 +141,18 @@ weight_dict = dict(
     w_pen=args.w_pen,
     w_spen=args.w_spen,
     w_joints=args.w_joints,
+    w_table=args.w_table
 )
-energy, E_fc, E_dis, E_pen, E_spen, E_joints = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
+energy, E_fc, E_dis, E_pen, E_spen, E_joints, E_table = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
 
 energy.sum().backward(retain_graph=True)
-logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, 0, show=False)
+logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, E_table, 0, show=False)
 
 for step in tqdm(range(1, args.n_iter + 1), desc='optimizing'):
     s = optimizer.try_step()
 
     optimizer.zero_grad()
-    new_energy, new_E_fc, new_E_dis, new_E_pen, new_E_spen, new_E_joints = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
+    new_energy, new_E_fc, new_E_dis, new_E_pen, new_E_spen, new_E_joints, new_E_table = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
 
     new_energy.sum().backward(retain_graph=True)
 
@@ -166,8 +165,9 @@ for step in tqdm(range(1, args.n_iter + 1), desc='optimizing'):
         E_pen[accept] = new_E_pen[accept]
         E_spen[accept] = new_E_spen[accept]
         E_joints[accept] = new_E_joints[accept]
+        E_table[accept] = new_E_table[accept]
 
-        logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, step, show=False)
+        logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, E_table, step, show=False)
 
 
 # save results

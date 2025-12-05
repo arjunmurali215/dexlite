@@ -28,7 +28,7 @@ class Logger:
         self.thres_dis = thres_dis
         self.thres_pen = thres_pen
 
-    def log(self, energy, E_fc, E_dis, E_pen, E_spen, E_joints, step, show=False):
+    def log(self, energy, E_fc, E_dis, E_pen, E_spen, E_joints, E_table, step, show=False):
         """
         Log energy terms and estimate success rate using energy thresholds
         
@@ -54,6 +54,7 @@ class Logger:
         self.writer.add_scalar('Energy/fc', E_fc.mean(), step)
         self.writer.add_scalar('Energy/dis', E_dis.mean(), step)
         self.writer.add_scalar('Energy/pen', E_pen.mean(), step)
+        self.writer.add_scalar('Energy/table', E_table.mean(), step)
 
         self.writer.add_scalar('Success/success', success.float().mean(), step)
         self.writer.add_scalar('Success/fc', success_fc.float().mean(), step)

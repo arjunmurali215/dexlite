@@ -51,7 +51,6 @@ parser.add_argument('--w_dis', default=100.0, type=float)
 parser.add_argument('--w_pen', default=100.0, type=float)
 parser.add_argument('--w_spen', default=10.0, type=float)
 parser.add_argument('--w_joints', default=1.0, type=float)
-parser.add_argument('--w_table', default=0.1, type=float)
 # initialization settings
 parser.add_argument('--jitter_strength', default=0.1, type=float)
 parser.add_argument('--distance_lower', default=0.2, type=float)
@@ -140,19 +139,18 @@ weight_dict = dict(
     w_dis=args.w_dis,
     w_pen=args.w_pen,
     w_spen=args.w_spen,
-    w_joints=args.w_joints,
-    w_table=args.w_table
+    w_joints=args.w_joints
 )
-energy, E_fc, E_dis, E_pen, E_spen, E_joints, E_table = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
+energy, E_fc, E_dis, E_pen, E_spen, E_joints= cal_energy(hand_model, object_model, verbose=True, **weight_dict)
 
 energy.sum().backward(retain_graph=True)
-logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, E_table, 0, show=False)
+logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, 0, show=False)
 
 for step in tqdm(range(1, args.n_iter + 1), desc='optimizing'):
     s = optimizer.try_step()
 
     optimizer.zero_grad()
-    new_energy, new_E_fc, new_E_dis, new_E_pen, new_E_spen, new_E_joints, new_E_table = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
+    new_energy, new_E_fc, new_E_dis, new_E_pen, new_E_spen, new_E_joints = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
 
     new_energy.sum().backward(retain_graph=True)
 
@@ -165,9 +163,8 @@ for step in tqdm(range(1, args.n_iter + 1), desc='optimizing'):
         E_pen[accept] = new_E_pen[accept]
         E_spen[accept] = new_E_spen[accept]
         E_joints[accept] = new_E_joints[accept]
-        E_table[accept] = new_E_table[accept]
 
-        logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, E_table, step, show=False)
+        logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, step, show=False)
 
 
 # save results

@@ -20,7 +20,7 @@ class DexSimpleCVAE(nn.Module):
         self.hand_dof = 28 
         self.input_dim = n_frames * self.hand_dof
         
-        # Condition Params: 256 (Global f_obj) + 256 (Local f_p) = 512 [cite: 211, 281]
+        # Condition Params: 256 (Global f_obj) + 256 (Local f_p) = 512
         self.condition_dim = 512 
         
         self.latent_dim = latent_dim
@@ -114,7 +114,7 @@ class DexSimpleCVAE(nn.Module):
         # -----------------------------------------------------------
         # D. DECODE
         # -----------------------------------------------------------
-        # Concat Latent z + Condition for Decoder [cite: 197]
+        # Concat Latent z + Condition for Decoder
         dec_input = torch.cat([z, condition_vector], dim=1)
         
         # Pass through Decoder MLP
@@ -136,7 +136,7 @@ class DexSimpleCVAE(nn.Module):
             local_feat = torch.zeros_like(global_feat)
         condition_vector = torch.cat([global_feat, local_feat], dim=1)
         
-        # 2. Sample Random Noise z ~ N(0, I) [cite: 197]
+        # 2. Sample Random Noise z ~ N(0, I)
         z = torch.randn(batch_size, self.latent_dim).to(global_feat.device)
         
         # 3. Decode

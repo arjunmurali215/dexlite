@@ -1,0 +1,1127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 1200 650"
+   version="1.1"
+   id="svg703"
+   sodipodi:docname="cvae_architecture.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview705"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="1.3615385"
+     inkscape:cx="599.68925"
+     inkscape:cy="324.99999"
+     inkscape:window-width="1920"
+     inkscape:window-height="1136"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg703" />
+  <defs
+     id="defs425">
+    <marker
+       id="arrow"
+       markerWidth="10"
+       markerHeight="7"
+       refX="9"
+       refY="3.5"
+       orient="auto">
+      <polygon
+         points="0 0, 10 3.5, 0 7"
+         fill="#374151"
+         id="polygon391" />
+    </marker>
+    <marker
+       id="arrow-blue"
+       markerWidth="10"
+       markerHeight="7"
+       refX="9"
+       refY="3.5"
+       orient="auto">
+      <polygon
+         points="0 0, 10 3.5, 0 7"
+         fill="#3B82F6"
+         id="polygon394" />
+    </marker>
+    <marker
+       id="arrow-green"
+       markerWidth="10"
+       markerHeight="7"
+       refX="9"
+       refY="3.5"
+       orient="auto">
+      <polygon
+         points="0 0, 10 3.5, 0 7"
+         fill="#10B981"
+         id="polygon397" />
+    </marker>
+    <linearGradient
+       id="encoder-grad"
+       x1="0%"
+       y1="0%"
+       x2="0%"
+       y2="100%">
+      <stop
+         offset="0%"
+         style="stop-color:#3B82F6"
+         id="stop400" />
+      <stop
+         offset="100%"
+         style="stop-color:#1D4ED8"
+         id="stop402" />
+    </linearGradient>
+    <linearGradient
+       id="decoder-grad"
+       x1="0%"
+       y1="0%"
+       x2="0%"
+       y2="100%">
+      <stop
+         offset="0%"
+         style="stop-color:#10B981"
+         id="stop405" />
+      <stop
+         offset="100%"
+         style="stop-color:#059669"
+         id="stop407" />
+    </linearGradient>
+    <linearGradient
+       id="latent-grad"
+       x1="0%"
+       y1="0%"
+       x2="100%"
+       y2="0%">
+      <stop
+         offset="0%"
+         style="stop-color:#8B5CF6"
+         id="stop410" />
+      <stop
+         offset="100%"
+         style="stop-color:#7C3AED"
+         id="stop412" />
+    </linearGradient>
+    <filter
+       id="shadow"
+       x="-0.00065789474"
+       y="-0.0016304348"
+       width="1.0013158"
+       height="1.0032609">
+      <feDropShadow
+         dx="2"
+         dy="3"
+         stdDeviation="3"
+         flood-opacity="0.15" />
+    </filter>
+    <filter
+       id="glow"
+       x="-0.072"
+       y="-0.072"
+       width="1.144"
+       height="1.144">
+      <feGaussianBlur
+         stdDeviation="3"
+         result="coloredBlur"
+         id="feGaussianBlur416" />
+      <feMerge
+         id="feMerge422">
+        <feMergeNode
+           in="coloredBlur"
+           id="feMergeNode418" />
+        <feMergeNode
+           in="SourceGraphic"
+           id="feMergeNode420" />
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect
+     width="1200"
+     height="650"
+     fill="#F9FAFB"
+     id="rect427" />
+  <!-- Title -->
+  <text
+     x="600"
+     y="40"
+     font-family="Inter, system-ui, sans-serif"
+     font-size="24"
+     font-weight="700"
+     text-anchor="middle"
+     fill="#111827"
+     id="text429">Conditional Variational Autoencoder (CVAE)</text>
+  <text
+     x="600"
+     y="65"
+     font-family="Inter, system-ui, sans-serif"
+     font-size="13"
+     text-anchor="middle"
+     fill="#6B7280"
+     id="text431">Learns to generate diverse grasp configurations conditioned on object geometry</text>
+  <!-- Main container -->
+  <rect
+     x="30"
+     y="90"
+     width="1140"
+     height="460"
+     rx="12"
+     fill="white"
+     stroke="#E5E7EB"
+     stroke-width="1.5"
+     filter="url(#shadow)"
+     id="rect433" />
+  <!-- ENCODER SECTION -->
+  <text
+     x="280"
+     y="125"
+     font-family="Inter, system-ui, sans-serif"
+     font-size="16"
+     font-weight="700"
+     text-anchor="middle"
+     fill="#1D4ED8"
+     id="text435">ENCODER q(z|x,c)</text>
+  <!-- Input boxes -->
+  <g
+     transform="translate(60, 150)"
+     id="g445">
+    <rect
+       x="0"
+       y="0"
+       width="110"
+       height="70"
+       rx="6"
+       fill="#DBEAFE"
+       stroke="#3B82F6"
+       stroke-width="1.5"
+       id="rect437" />
+    <text
+       x="55"
+       y="25"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="11"
+       font-weight="600"
+       text-anchor="middle"
+       fill="#1E40AF"
+       id="text439">Grasp Config</text>
+    <text
+       x="55"
+       y="42"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="10"
+       text-anchor="middle"
+       fill="#3B82F6"
+       id="text441">x ∈ ℝ²⁸</text>
+    <text
+       x="55"
+       y="58"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="#60A5FA"
+       id="text443">(trans+rot+joints)</text>
+  </g>
+  <g
+     transform="translate(60, 235)"
+     id="g455">
+    <rect
+       x="0"
+       y="0"
+       width="110"
+       height="70"
+       rx="6"
+       fill="#D1FAE5"
+       stroke="#10B981"
+       stroke-width="1.5"
+       id="rect447" />
+    <text
+       x="55"
+       y="25"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="11"
+       font-weight="600"
+       text-anchor="middle"
+       fill="#047857"
+       id="text449">Condition</text>
+    <text
+       x="55"
+       y="42"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="10"
+       text-anchor="middle"
+       fill="#10B981"
+       id="text451">c ∈ ℝ⁵¹²</text>
+    <text
+       x="55"
+       y="58"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="#34D399"
+       id="text453">(from PointNet)</text>
+  </g>
+  <!-- Concat symbol -->
+  <g
+     transform="translate(185, 210)"
+     id="g461">
+    <circle
+       cx="15"
+       cy="30"
+       r="18"
+       fill="#F3F4F6"
+       stroke="#6B7280"
+       stroke-width="1.5"
+       id="circle457" />
+    <text
+       x="15"
+       y="35"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="16"
+       font-weight="700"
+       text-anchor="middle"
+       fill="#374151"
+       id="text459">⊕</text>
+  </g>
+  <text
+     x="200"
+     y="275"
+     font-family="Inter, system-ui, sans-serif"
+     font-size="9"
+     text-anchor="middle"
+     fill="#6B7280"
+     id="text463">540</text>
+  <!-- Arrows to concat -->
+  <line
+     x1="175"
+     y1="185"
+     x2="185"
+     y2="220"
+     stroke="#374151"
+     stroke-width="1.5"
+     id="line465" />
+  <line
+     x1="175"
+     y1="270"
+     x2="185"
+     y2="250"
+     stroke="#374151"
+     stroke-width="1.5"
+     id="line467" />
+  <!-- Arrow from concat -->
+  <line
+     x1="218"
+     y1="240"
+     x2="250"
+     y2="240"
+     stroke="#374151"
+     stroke-width="1.5"
+     marker-end="url(#arrow)"
+     id="line469" />
+  <!-- Encoder FC layers -->
+  <g
+     transform="translate(260, 175)"
+     id="g485">
+    <rect
+       x="0"
+       y="0"
+       width="75"
+       height="130"
+       rx="6"
+       fill="url(#encoder-grad)"
+       filter="url(#shadow)"
+       id="rect471" />
+    <text
+       x="37"
+       y="25"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="10"
+       font-weight="600"
+       text-anchor="middle"
+       fill="white"
+       id="text473">FC</text>
+    <text
+       x="37"
+       y="42"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text475">540→256</text>
+    <text
+       x="37"
+       y="65"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.7)"
+       id="text477">BatchNorm</text>
+    <text
+       x="37"
+       y="80"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="#FCD34D"
+       id="text479">ReLU</text>
+    <line
+       x1="5"
+       y1="95"
+       x2="70"
+       y2="95"
+       stroke="rgba(255,255,255,0.3)"
+       id="line481" />
+    <text
+       x="37"
+       y="115"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.8)"
+       id="text483">out: 256</text>
+  </g>
+  <line
+     x1="340"
+     y1="240"
+     x2="365"
+     y2="240"
+     stroke="#374151"
+     stroke-width="1.5"
+     marker-end="url(#arrow)"
+     id="line487" />
+  <g
+     transform="translate(375, 175)"
+     id="g503">
+    <rect
+       x="0"
+       y="0"
+       width="75"
+       height="130"
+       rx="6"
+       fill="url(#encoder-grad)"
+       filter="url(#shadow)"
+       id="rect489" />
+    <text
+       x="37"
+       y="25"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="10"
+       font-weight="600"
+       text-anchor="middle"
+       fill="white"
+       id="text491">FC</text>
+    <text
+       x="37"
+       y="42"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text493">256→512</text>
+    <text
+       x="37"
+       y="65"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.7)"
+       id="text495">BatchNorm</text>
+    <text
+       x="37"
+       y="80"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="#FCD34D"
+       id="text497">ReLU</text>
+    <line
+       x1="5"
+       y1="95"
+       x2="70"
+       y2="95"
+       stroke="rgba(255,255,255,0.3)"
+       id="line499" />
+    <text
+       x="37"
+       y="115"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.8)"
+       id="text501">out: 512</text>
+  </g>
+  <line
+     x1="455"
+     y1="240"
+     x2="480"
+     y2="240"
+     stroke="#374151"
+     stroke-width="1.5"
+     marker-end="url(#arrow)"
+     id="line505" />
+  <g
+     transform="translate(490, 175)"
+     id="g521">
+    <rect
+       x="0"
+       y="0"
+       width="75"
+       height="130"
+       rx="6"
+       fill="url(#encoder-grad)"
+       filter="url(#shadow)"
+       id="rect507" />
+    <text
+       x="37"
+       y="25"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="10"
+       font-weight="600"
+       text-anchor="middle"
+       fill="white"
+       id="text509">FC</text>
+    <text
+       x="37"
+       y="42"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text511">512→256</text>
+    <text
+       x="37"
+       y="65"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.7)"
+       id="text513">BatchNorm</text>
+    <text
+       x="37"
+       y="80"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="#FCD34D"
+       id="text515">ReLU</text>
+    <line
+       x1="5"
+       y1="95"
+       x2="70"
+       y2="95"
+       stroke="rgba(255,255,255,0.3)"
+       id="line517" />
+    <text
+       x="37"
+       y="115"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.8)"
+       id="text519">out: 256</text>
+  </g>
+  <!-- Split to mu and sigma -->
+  <line
+     x1="570"
+     y1="240"
+     x2="600"
+     y2="240"
+     stroke="#374151"
+     stroke-width="1.5"
+     id="line523" />
+  <line
+     x1="600"
+     y1="240"
+     x2="600"
+     y2="180"
+     stroke="#374151"
+     stroke-width="1.5"
+     id="line525" />
+  <line
+     x1="600"
+     y1="240"
+     x2="600"
+     y2="300"
+     stroke="#374151"
+     stroke-width="1.5"
+     id="line527" />
+  <line
+     x1="600"
+     y1="180"
+     x2="625"
+     y2="180"
+     stroke="#374151"
+     stroke-width="1.5"
+     marker-end="url(#arrow)"
+     id="line529" />
+  <line
+     x1="600"
+     y1="300"
+     x2="625"
+     y2="300"
+     stroke="#374151"
+     stroke-width="1.5"
+     marker-end="url(#arrow)"
+     id="line531" />
+  <!-- Mu and Sigma layers -->
+  <g
+     transform="translate(635, 150)"
+     id="g539">
+    <rect
+       x="0"
+       y="0"
+       width="80"
+       height="60"
+       rx="6"
+       fill="#8B5CF6"
+       filter="url(#shadow)"
+       id="rect533" />
+    <text
+       x="40"
+       y="25"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="11"
+       font-weight="600"
+       text-anchor="middle"
+       fill="white"
+       id="text535">μ (mean)</text>
+    <text
+       x="40"
+       y="45"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text537">256→256</text>
+  </g>
+  <g
+     transform="translate(635, 270)"
+     id="g547">
+    <rect
+       x="0"
+       y="0"
+       width="80"
+       height="60"
+       rx="6"
+       fill="#8B5CF6"
+       filter="url(#shadow)"
+       id="rect541" />
+    <text
+       x="40"
+       y="25"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="11"
+       font-weight="600"
+       text-anchor="middle"
+       fill="white"
+       id="text543">σ (std)</text>
+    <text
+       x="40"
+       y="45"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text545">256→256</text>
+  </g>
+  <!-- LATENT SPACE -->
+  <g
+     transform="translate(745, 190)"
+     id="g557">
+    <rect
+       x="0"
+       y="0"
+       width="100"
+       height="100"
+       rx="50"
+       fill="url(#latent-grad)"
+       filter="url(#glow)"
+       id="rect549" />
+    <text
+       x="50"
+       y="38"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="11"
+       font-weight="700"
+       text-anchor="middle"
+       fill="white"
+       id="text551">Latent</text>
+    <text
+       x="50"
+       y="55"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="11"
+       font-weight="700"
+       text-anchor="middle"
+       fill="white"
+       id="text553">Space</text>
+    <text
+       x="50"
+       y="75"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="10"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text555">z ∈ ℝ²⁵⁶</text>
+  </g>
+  <!-- Reparameterization -->
+  <line
+     x1="720"
+     y1="180"
+     x2="745"
+     y2="220"
+     stroke="#8B5CF6"
+     stroke-width="1.5"
+     id="line559" />
+  <line
+     x1="720"
+     y1="300"
+     x2="745"
+     y2="260"
+     stroke="#8B5CF6"
+     stroke-width="1.5"
+     id="line561" />
+  <text
+     x="795"
+     y="310"
+     font-family="Inter, system-ui, sans-serif"
+     font-size="9"
+     text-anchor="middle"
+     fill="#7C3AED"
+     id="text563">z = μ + σ⊙ε</text>
+  <text
+     x="795"
+     y="325"
+     font-family="Inter, system-ui, sans-serif"
+     font-size="8"
+     text-anchor="middle"
+     fill="#9CA3AF"
+     id="text565">ε ~ N(0,I)</text>
+  <!-- Arrow from latent -->
+  <line
+     x1="850"
+     y1="240"
+     x2="885"
+     y2="240"
+     stroke="#374151"
+     stroke-width="1.5"
+     marker-end="url(#arrow)"
+     id="line567" />
+  <!-- DECODER SECTION -->
+  <text
+     x="1010"
+     y="125"
+     font-family="Inter, system-ui, sans-serif"
+     font-size="16"
+     font-weight="700"
+     text-anchor="middle"
+     fill="#059669"
+     id="text569">DECODER p(x|z,c)</text>
+  <!-- Decoder concat -->
+  <g
+     transform="translate(895, 210)"
+     id="g575">
+    <circle
+       cx="15"
+       cy="30"
+       r="18"
+       fill="#F3F4F6"
+       stroke="#6B7280"
+       stroke-width="1.5"
+       id="circle571" />
+    <text
+       x="15"
+       y="35"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="16"
+       font-weight="700"
+       text-anchor="middle"
+       fill="#374151"
+       id="text573">⊕</text>
+  </g>
+  <text
+     x="910"
+     y="275"
+     font-family="Inter, system-ui, sans-serif"
+     font-size="9"
+     text-anchor="middle"
+     fill="#6B7280"
+     id="text577">768</text>
+  <!-- Condition to decoder -->
+  <g
+     transform="translate(845, 335)"
+     id="g585">
+    <rect
+       x="0"
+       y="0"
+       width="110"
+       height="45"
+       rx="6"
+       fill="#D1FAE5"
+       stroke="#10B981"
+       stroke-width="1.5"
+       id="rect579" />
+    <text
+       x="55"
+       y="18"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="10"
+       font-weight="600"
+       text-anchor="middle"
+       fill="#047857"
+       id="text581">Condition</text>
+    <text
+       x="55"
+       y="35"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="#10B981"
+       id="text583">c ∈ ℝ⁵¹²</text>
+  </g>
+  <line
+     x1="910"
+     y1="335"
+     x2="910"
+     y2="260"
+     stroke="#10B981"
+     stroke-width="1.5"
+     id="line587" />
+  <!-- Arrow from concat to decoder -->
+  <line
+     x1="928"
+     y1="240"
+     x2="960"
+     y2="240"
+     stroke="#374151"
+     stroke-width="1.5"
+     marker-end="url(#arrow)"
+     id="line589" />
+  <!-- Decoder FC layers -->
+  <g
+     transform="translate(970, 175)"
+     id="g607">
+    <rect
+       x="0"
+       y="0"
+       width="55"
+       height="130"
+       rx="6"
+       fill="url(#decoder-grad)"
+       filter="url(#shadow)"
+       id="rect591" />
+    <text
+       x="27"
+       y="20"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       font-weight="600"
+       text-anchor="middle"
+       fill="white"
+       id="text593">FC</text>
+    <text
+       x="27"
+       y="35"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text595">768</text>
+    <text
+       x="27"
+       y="48"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text597">↓</text>
+    <text
+       x="27"
+       y="60"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text599">256</text>
+    <line
+       x1="5"
+       y1="75"
+       x2="50"
+       y2="75"
+       stroke="rgba(255,255,255,0.3)"
+       id="line601" />
+    <text
+       x="27"
+       y="90"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="7"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.7)"
+       id="text603">BN</text>
+    <text
+       x="27"
+       y="105"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="7"
+       text-anchor="middle"
+       fill="#FCD34D"
+       id="text605">ReLU</text>
+  </g>
+  <line
+     x1="1030"
+     y1="240"
+     x2="1045"
+     y2="240"
+     stroke="#374151"
+     stroke-width="1.5"
+     marker-end="url(#arrow)"
+     id="line609" />
+  <g
+     transform="translate(1050, 175)"
+     id="g627">
+    <rect
+       x="0"
+       y="0"
+       width="55"
+       height="130"
+       rx="6"
+       fill="url(#decoder-grad)"
+       filter="url(#shadow)"
+       id="rect611" />
+    <text
+       x="27"
+       y="20"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       font-weight="600"
+       text-anchor="middle"
+       fill="white"
+       id="text613">FC</text>
+    <text
+       x="27"
+       y="35"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text615">256</text>
+    <text
+       x="27"
+       y="48"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text617">↓</text>
+    <text
+       x="27"
+       y="60"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text619">512</text>
+    <line
+       x1="5"
+       y1="75"
+       x2="50"
+       y2="75"
+       stroke="rgba(255,255,255,0.3)"
+       id="line621" />
+    <text
+       x="27"
+       y="90"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="7"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.7)"
+       id="text623">BN</text>
+    <text
+       x="27"
+       y="105"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="7"
+       text-anchor="middle"
+       fill="#FCD34D"
+       id="text625">ReLU</text>
+  </g>
+  <!-- Output to side -->
+  <line
+     x1="1077"
+     y1="310"
+     x2="1077"
+     y2="365"
+     stroke="#374151"
+     stroke-width="1.5"
+     id="line629" />
+  <line
+     x1="1077"
+     y1="365"
+     x2="1000"
+     y2="365"
+     stroke="#374151"
+     stroke-width="1.5"
+     id="line631" />
+  <line
+     x1="1000"
+     y1="365"
+     x2="1000"
+     y2="400"
+     stroke="#374151"
+     stroke-width="1.5"
+     marker-end="url(#arrow)"
+     id="line633" />
+  <!-- Final output layers -->
+  <g
+     transform="translate(920, 410)"
+     id="g643">
+    <rect
+       x="0"
+       y="0"
+       width="80"
+       height="55"
+       rx="6"
+       fill="url(#decoder-grad)"
+       filter="url(#shadow)"
+       id="rect635" />
+    <text
+       x="40"
+       y="18"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       font-weight="600"
+       text-anchor="middle"
+       fill="white"
+       id="text637">FC</text>
+    <text
+       x="40"
+       y="35"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text639">512→256</text>
+    <text
+       x="40"
+       y="48"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="7"
+       text-anchor="middle"
+       fill="#FCD34D"
+       id="text641">BN + ReLU</text>
+  </g>
+  <line
+     x1="920"
+     y1="437"
+     x2="890"
+     y2="437"
+     stroke="#374151"
+     stroke-width="1.5"
+     marker-end="url(#arrow)"
+     id="line645" />
+  <g
+     transform="translate(790, 410)"
+     id="g655">
+    <rect
+       x="0"
+       y="0"
+       width="95"
+       height="55"
+       rx="6"
+       fill="url(#decoder-grad)"
+       filter="url(#shadow)"
+       id="rect647" />
+    <text
+       x="47"
+       y="18"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       font-weight="600"
+       text-anchor="middle"
+       fill="white"
+       id="text649">Output FC</text>
+    <text
+       x="47"
+       y="35"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="8"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.9)"
+       id="text651">256→28</text>
+    <text
+       x="47"
+       y="48"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="7"
+       text-anchor="middle"
+       fill="rgba(255,255,255,0.7)"
+       id="text653">(no activation)</text>
+  </g>
+  <line
+     x1="790"
+     y1="437"
+     x2="755"
+     y2="437"
+     stroke="#374151"
+     stroke-width="1.5"
+     marker-end="url(#arrow)"
+     id="line657" />
+  <!-- Output box -->
+  <g
+     transform="translate(620, 405)"
+     id="g667">
+    <rect
+       x="0"
+       y="0"
+       width="130"
+       height="65"
+       rx="8"
+       fill="#FEF3C7"
+       stroke="#F59E0B"
+       stroke-width="2"
+       id="rect659" />
+    <text
+       x="65"
+       y="22"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="11"
+       font-weight="700"
+       text-anchor="middle"
+       fill="#92400E"
+       id="text661">Output</text>
+    <text
+       x="65"
+       y="40"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="10"
+       text-anchor="middle"
+       fill="#D97706"
+       id="text663">x̂ ∈ ℝ²⁸</text>
+    <text
+       x="65"
+       y="55"
+       font-family="Inter, system-ui, sans-serif"
+       font-size="9"
+       text-anchor="middle"
+       fill="#F59E0B"
+       id="text665">Grasp Configuration</text>
+  </g>
+  <!-- Loss Function Box -->
+  <!-- Inference note -->
+  <!-- Footer -->
+  <text
+     x="600"
+     y="620"
+     font-family="Inter, system-ui, sans-serif"
+     font-size="11"
+     text-anchor="middle"
+     fill="#9CA3AF"
+     id="text701">CVAE generates diverse grasp configurations by sampling from learned latent distribution</text>
+</svg>
